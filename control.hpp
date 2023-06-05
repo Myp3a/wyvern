@@ -1,14 +1,22 @@
 #pragma once
 
+#include "offsets.hpp"
 #include "ec.hpp"
 #include "structs.hpp"
+#include <string>
 
 class Control {
 private:
 	EmbeddedController ec;
+	std::string firmware;
+	Offsets offsets;
+
 public:
 	Control();
 	~Control();
+
+	std::string firmware_name();
+	void dump_ec();
 
 	bool coolerboost_get();
 	bool coolerboost_set(bool enabled);

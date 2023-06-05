@@ -1,3 +1,4 @@
+/* from https://github.com/Soberia/EmbeddedController */
 #ifndef EC_H
 #define EC_H
 

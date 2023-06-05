@@ -12,6 +12,8 @@ int main(int argc, char** argv)
 
     app.require_subcommand(0, 1);
 
+    CLI::App* version_app = app.add_subcommand("version", "Information about system and program");
+
     CLI::App* fan_app = app.add_subcommand("fan", "Fan curve control");
     CLI::App* coolerboost_app = fan_app->add_subcommand("coolerboost", "CoolerBoost management");
     int coolerboost_action{ 0 };
@@ -33,6 +35,14 @@ int main(int argc, char** argv)
 
     CLI11_PARSE(app, argc, argv);
     Control ctrl = Control();
+
+    if (*version_app) {
+        cout << "Wyvern v. master\n";
+        cout << "System firmware: " << ctrl.firmware_name() << '\n';
+        cout << "EC dump:\n";
+        ctrl.dump_ec();
+        return 0;
+    }
 
     if (*fan_app) {
         if (!(gpu) && !(cpu)) {

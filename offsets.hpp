@@ -1,10 +1,22 @@
-int COOLER_BOOST = 0x98;
-int CPU_TEMP_ARR = 0x6A;
-int CPU_FAN_ARR = 0x73;
-int GPU_TEMP_ARR = 0x82;
-int GPU_FAN_ARR = 0x8A;
-int CPU_FAN_PERCENT = 0x71;
-int CPU_FAN_RPM = 0xCB;
-int GPU_FAN_PERCENT = 0x89;
-int GPU_FAN_RPM = 0xC9;
-int BATTERY_THRESHOLD = 0xEF;
+#pragma once
+
+#include <string>
+
+//int FIRMWARE_NAME = 0xA0;
+
+struct Offsets
+{
+	int coolerboost;
+	int cpu_temp_arr;
+	int cpu_fan_arr;
+	int gpu_temp_arr;
+	int gpu_fan_arr;
+	int cpu_fan_percent;
+	int cpu_fan_rpm;
+	int gpu_fan_percent;
+	int gpu_fan_rpm;
+
+	int battery_threshold;
+};
+
+Offsets get_offsets(std::string firmware_name);

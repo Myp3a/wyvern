@@ -4,33 +4,45 @@
 
 Control::Control() {
 	this->ec = EmbeddedController();
+	for (int i = 0; i < 12; i++) {
+		this->firmware += (char)ec.readByte(0xA0 + i);
+	}
+	this->offsets = get_offsets(firmware);
 }
 
 Control::~Control() {
 	this->ec.close();
 }
 
+std::string Control::firmware_name() {
+	return firmware;
+}
+
+void Control::dump_ec() {
+	ec.printDump();
+}
+
 bool Control::coolerboost_get() {
-	return bool(ec.readByte(COOLER_BOOST) >> 7);
+	return bool(ec.readByte(offsets.coolerboost) >> 7);
 }
 
 bool Control::coolerboost_set(bool enabled) {
-	BYTE b = ec.readByte(COOLER_BOOST);
+	BYTE b = ec.readByte(offsets.coolerboost);
 	if (enabled) {
 		b |= 0b10000000;
 	}
 	else {
 		b &= 0b01111111;
 	}
-	return ec.writeByte(COOLER_BOOST, b);
+	return ec.writeByte(offsets.coolerboost, b);
 }
 
 FanCurve Control::gpu_fan_curve_get() {
 	FanCurve cur = FanCurve();
 	for (int i = 0; i < 6; i++) {
 		Point p = Point();
-		p.temp = ec.readByte(GPU_TEMP_ARR + i);
-		p.speed = ec.readByte(GPU_FAN_ARR + i);
+		p.temp = ec.readByte(offsets.gpu_temp_arr + i);
+		p.speed = ec.readByte(offsets.gpu_fan_arr + i);
 		cur.point[i] = p;
 	}
 	return cur;
@@ -49,8 +61,8 @@ bool Control::gpu_fan_curve_set(FanCurve cur) {
 	bool status = true;
 	for (int i = 0; i < 6; i++) {
 		Point p = cur.point[i];
-		status &= ec.writeByte(GPU_TEMP_ARR + i, p.temp);
-		status &= ec.writeByte(GPU_FAN_ARR + i, p.speed);
+		status &= ec.writeByte(offsets.gpu_temp_arr + i, p.temp);
+		status &= ec.writeByte(offsets.gpu_fan_arr + i, p.speed);
 	}
 	return status;
 }
@@ -59,8 +71,8 @@ FanCurve Control::cpu_fan_curve_get() {
 	FanCurve cur = FanCurve();
 	for (int i = 0; i < 6; i++) {
 		Point p = Point();
-		p.temp = ec.readByte(CPU_TEMP_ARR + i);
-		p.speed = ec.readByte(CPU_FAN_ARR + i);
+		p.temp = ec.readByte(offsets.cpu_temp_arr + i);
+		p.speed = ec.readByte(offsets.cpu_fan_arr + i);
 		cur.point[i] = p;
 	}
 	return cur;
@@ -79,37 +91,37 @@ bool Control::cpu_fan_curve_set(FanCurve cur) {
 	bool status = true;
 	for (int i = 0; i < 6; i++) {
 		Point p = cur.point[i];
-		status &= ec.writeByte(CPU_TEMP_ARR + i, p.temp);
-		status &= ec.writeByte(CPU_FAN_ARR + i, p.speed);
+		status &= ec.writeByte(offsets.cpu_temp_arr + i, p.temp);
+		status &= ec.writeByte(offsets.cpu_fan_arr + i, p.speed);
 	}
 	return status;
 }
 
 int Control::cpu_fan_percent() {
-	return ec.readByte(CPU_FAN_PERCENT);
+	return ec.readByte(offsets.cpu_fan_percent);
 }
 
 int Control::gpu_fan_percent() {
-	return ec.readByte(GPU_FAN_PERCENT);
+	return ec.readByte(offsets.gpu_fan_percent);
 }
 
 int Control::cpu_fan_rpm() {
-	int rpm = ec.readByte(CPU_FAN_RPM);
+	int rpm = ec.readByte(offsets.cpu_fan_rpm);
 	return (int)(478000 / rpm);
 }
 
 int Control::gpu_fan_rpm() {
-	int rpm = ec.readByte(GPU_FAN_RPM);
+	int rpm = ec.readByte(offsets.gpu_fan_rpm);
 	return (int)(478000 / rpm);
 }
 
 int Control::battery_threshold_get() {
-	int threshold = ec.readByte(BATTERY_THRESHOLD);
+	int threshold = ec.readByte(offsets.battery_threshold);
 	threshold &= 0b01111111;
 	return threshold;
 }
 
 bool Control::battery_threshold_set(int threshold) {
 	threshold |= 0b10000000;
-	return ec.writeByte(BATTERY_THRESHOLD, threshold);
+	return ec.writeByte(offsets.battery_threshold, threshold);
 }
