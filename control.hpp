@@ -31,4 +31,9 @@ public:
 
 	int battery_threshold_get();
 	bool battery_threshold_set(int threshold);
+
+	bool webcam_first_get();
+	bool webcam_second_get();
+	bool webcam_first_set(bool state);
+	bool webcam_second_set(bool state);
 };

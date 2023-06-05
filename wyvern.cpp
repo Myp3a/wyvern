@@ -22,16 +22,24 @@ int main(int argc, char** argv)
     string curve_text = "";
     bool gpu{ false };
     bool cpu{ false };
-    bool fan_set{ false };
     vector<pair<int,int>> points;
     fan_app->add_flag("--gpu", gpu, "Only GPU fan");
     fan_app->add_flag("--cpu", cpu, "Only CPU fan");
-    CLI::Option* fan_do_set = fan_app->add_flag("--set", fan_set, "Set new curve");
-    fan_app->add_option("-p,--point", points, "Point on the curve in format: [temp,speed]. Max 6 points.")->expected(0, 7)->needs(fan_do_set);
+    CLI::Option* fan_set = fan_app->add_flag("--set", "Set new curve");
+    fan_app->add_option("-p,--point", points, "Point on the curve in format: [temp,speed]. Max 6 points.")->expected(0, 7)->needs(fan_set);
     
     CLI::App* battery_app = app.add_subcommand("battery", "Battery threshold control");
     int batt_threshold{ -1 };
     battery_app->add_option("--percent", batt_threshold, "Battery charge limit");
+
+    CLI::App* webcam_app = app.add_subcommand("webcam", "Webcam control");
+    int webcam_selection{ 0 };
+    webcam_app->add_flag("--first{1},--second{2}", webcam_selection, "Webcam lock selection");
+    CLI::Option* enable_webcam = webcam_app->add_flag("--enable", "Enable webcam");
+    CLI::Option* disable_webcam = webcam_app->add_flag("--disable", "Disable webcam");
+    enable_webcam->excludes(disable_webcam);
+    disable_webcam->excludes(enable_webcam);
+
 
     CLI11_PARSE(app, argc, argv);
     Control ctrl = Control();
@@ -71,7 +79,7 @@ int main(int argc, char** argv)
             }
             return 0;
         }
-        if (fan_set) {
+        if (*fan_set) {
             FanCurve cur = ctrl.cpu_fan_curve_get();
             int i = 0;
             for (; i < points.size(); i++) {
@@ -123,5 +131,45 @@ int main(int argc, char** argv)
         cout << "Battery charge threshold: " << ctrl.battery_threshold_get() << "%\n";
         return 0;
     }
+
+    if (*webcam_app) {
+        if (*enable_webcam) {
+            if (webcam_selection == 0 || webcam_selection == 1) {
+                ctrl.webcam_first_set(true);
+            }
+            if (webcam_selection == 0 || webcam_selection == 2) {
+                ctrl.webcam_second_set(true);
+            }
+            return 0;
+        }
+        if (*disable_webcam) {
+            if (webcam_selection == 0 || webcam_selection == 1) {
+                ctrl.webcam_first_set(false);
+            }
+            if (webcam_selection == 0 || webcam_selection == 2) {
+                ctrl.webcam_second_set(false);
+            }
+            return 0;
+        }
+        if (webcam_selection == 0 || webcam_selection == 1) {
+            cout << "First webcam switch enabled: ";
+            if (ctrl.webcam_first_get()) {
+                cout << "True\n";
+            }
+            else {
+                cout << "False\n";
+            }
+        }
+        if (webcam_selection == 0 || webcam_selection == 2) {
+            cout << "Second webcam switch enabled: ";
+            if (ctrl.webcam_second_get()) {
+                cout << "True\n";
+            }
+            else {
+                cout << "False\n";
+            }
+        }
+    }
+
     return 0;
 }

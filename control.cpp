@@ -125,3 +125,39 @@ bool Control::battery_threshold_set(int threshold) {
 	threshold |= 0b10000000;
 	return ec.writeByte(offsets.battery_threshold, threshold);
 }
+
+bool Control::webcam_first_get() {
+	bool res = (bool)((0b00000010 & ec.readByte(offsets.webcam_enabled_first)) >> 1);
+	return res;
+}
+
+bool Control::webcam_first_set(bool state) {
+	if (state) {
+		int val = ec.readByte(offsets.webcam_enabled_first);
+		val |= 0b00000010;
+		return ec.writeByte(offsets.webcam_enabled_first, val);
+	}
+	else {
+		int val = ec.readByte(offsets.webcam_enabled_first);
+		val &= 0b11111101;
+		return ec.writeByte(offsets.webcam_enabled_first, val);
+	}
+}
+
+bool Control::webcam_second_get() {
+	bool res = (bool)((0b00000010 & ec.readByte(offsets.webcam_enabled_second)) >> 1);
+	return res;
+}
+
+bool Control::webcam_second_set(bool state) {
+	if (state) {
+		int val = ec.readByte(offsets.webcam_enabled_second);
+		val |= 0b00000010;
+		return ec.writeByte(offsets.webcam_enabled_second, val);
+	}
+	else {
+		int val = ec.readByte(offsets.webcam_enabled_second);
+		val &= 0b11111101;
+		return ec.writeByte(offsets.webcam_enabled_second, val);
+	}
+}

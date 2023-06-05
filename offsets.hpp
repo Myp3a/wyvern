@@ -17,6 +17,9 @@ struct Offsets
 	int gpu_fan_rpm;
 
 	int battery_threshold;
+
+	int webcam_enabled_first;
+	int webcam_enabled_second;
 };
 
 Offsets get_offsets(std::string firmware_name);
