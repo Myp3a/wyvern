@@ -24,8 +24,12 @@ int main(int argc, char** argv)
     vector<pair<int,int>> points;
     fan_app->add_flag("--gpu", gpu, "Only GPU fan");
     fan_app->add_flag("--cpu", cpu, "Only CPU fan");
-    fan_app->add_flag("--set", fan_set, "Set new curve");
-    fan_app->add_option("-p,--point", points, "Point on the curve in format: [temp,speed]. Max 6 points.")->expected(0, 6);
+    CLI::Option* fan_do_set = fan_app->add_flag("--set", fan_set, "Set new curve");
+    fan_app->add_option("-p,--point", points, "Point on the curve in format: [temp,speed]. Max 6 points.")->expected(0, 7)->needs(fan_do_set);
+    
+    CLI::App* battery_app = app.add_subcommand("battery", "Battery threshold control");
+    int batt_threshold{ -1 };
+    battery_app->add_option("--percent", batt_threshold, "Battery charge limit");
 
     CLI11_PARSE(app, argc, argv);
     Control ctrl = Control();
@@ -97,5 +101,17 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    if (*battery_app) {
+        if (batt_threshold > -1) {
+            if (batt_threshold < 10 || batt_threshold > 100) {
+                cout << "Battery threshold should be between 10 and 100\n";
+                return 1;
+            }
+            ctrl.battery_threshold_set(batt_threshold);
+            return 0;
+        }
+        cout << "Battery charge threshold: " << ctrl.battery_threshold_get() << "%\n";
+        return 0;
+    }
     return 0;
 }

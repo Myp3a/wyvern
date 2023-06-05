@@ -102,3 +102,14 @@ int Control::gpu_fan_rpm() {
 	int rpm = ec.readByte(GPU_FAN_RPM);
 	return (int)(478000 / rpm);
 }
+
+int Control::battery_threshold_get() {
+	int threshold = ec.readByte(BATTERY_THRESHOLD);
+	threshold &= 0b01111111;
+	return threshold;
+}
+
+bool Control::battery_threshold_set(int threshold) {
+	threshold |= 0b10000000;
+	return ec.writeByte(BATTERY_THRESHOLD, threshold);
+}
