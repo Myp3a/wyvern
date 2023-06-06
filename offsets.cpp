@@ -3,6 +3,7 @@
 
 Offsets myOffsets{
 	.coolerboost = 0x98,
+	.fan_mode = 0xd4,
 	.cpu_temp_arr = 0x6a,
 	.cpu_fan_arr = 0x73,
 	.gpu_temp_arr = 0x82,

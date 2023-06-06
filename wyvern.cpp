@@ -18,6 +18,9 @@ int main(int argc, char** argv)
     CLI::App* coolerboost_app = fan_app->add_subcommand("coolerboost", "CoolerBoost management");
     int coolerboost_action{ 0 };
     coolerboost_app->add_flag("--enable{1},--disable{2}", coolerboost_action, "CoolerBoost state");
+    CLI::App* silent_app = fan_app->add_subcommand("silent", "Silent mode control");
+    int silent_action{ 0 };
+    silent_app->add_flag("--enable{1},--disable{2}", silent_action, "CoolerBoost state");
     fan_app->require_subcommand(0, 1);
     string curve_text = "";
     bool gpu{ false };
@@ -79,6 +82,28 @@ int main(int argc, char** argv)
             }
             return 0;
         }
+        if (*silent_app) {
+            string s;
+            switch (silent_action) {
+            case 0:
+                s = "Silent mode state: ";
+                if (ctrl.silent_get()) {
+                    s += "enabled\n";
+                }
+                else {
+                    s += "disabled\n";
+                }
+                cout << s;
+                break;
+            case 1:
+                ctrl.silent_set(true);
+                break;
+            case 2:
+                ctrl.silent_set(false);
+                break;
+            }
+            return 0;
+        }
         if (*fan_set) {
             FanCurve cur = ctrl.cpu_fan_curve_get();
             int i = 0;
@@ -98,6 +123,23 @@ int main(int argc, char** argv)
             }
             return 0;
         }
+        string s = "CoolerBoost state: ";
+        if (ctrl.coolerboost_get()) {
+            s += "enabled\n";
+        }
+        else {
+            s += "disabled\n";
+        }
+        cout << s;
+        s = "Silent mode state: ";
+        if (ctrl.silent_get()) {
+            s += "enabled\n";
+        }
+        else {
+            s += "disabled\n";
+        }
+        cout << s;
+        cout << '\n';
         FanCurve cur_cpu = ctrl.cpu_fan_curve_get();
         FanCurve cur_gpu = ctrl.gpu_fan_curve_get();
         if (cpu) {

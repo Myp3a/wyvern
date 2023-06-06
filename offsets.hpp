@@ -7,6 +7,8 @@
 struct Offsets
 {
 	int coolerboost;
+	int fan_mode;
+
 	int cpu_temp_arr;
 	int cpu_fan_arr;
 	int gpu_temp_arr;

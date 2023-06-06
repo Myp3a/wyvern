@@ -37,6 +37,21 @@ bool Control::coolerboost_set(bool enabled) {
 	return ec.writeByte(offsets.coolerboost, b);
 }
 
+bool Control::silent_get() {
+	return bool((ec.readByte(offsets.fan_mode) >> 4) % 2);
+}
+
+bool Control::silent_set(bool enabled) {
+	BYTE b = ec.readByte(offsets.fan_mode);
+	if (enabled) {
+		b |= 0b00010000;
+	}
+	else {
+		b &= 0b11101111;
+	}
+	return ec.writeByte(offsets.fan_mode, b);
+}
+
 FanCurve Control::gpu_fan_curve_get() {
 	FanCurve cur = FanCurve();
 	for (int i = 0; i < 6; i++) {

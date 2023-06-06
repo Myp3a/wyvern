@@ -20,6 +20,9 @@ public:
 
 	bool coolerboost_get();
 	bool coolerboost_set(bool enabled);
+	bool silent_get();
+	bool silent_set(bool enabled);
+
 	FanCurve gpu_fan_curve_get();
 	bool gpu_fan_curve_set(FanCurve cur);
 	FanCurve cpu_fan_curve_get();
