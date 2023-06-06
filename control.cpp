@@ -38,7 +38,7 @@ bool Control::coolerboost_set(bool enabled) {
 }
 
 bool Control::silent_get() {
-	return bool((ec.readByte(offsets.fan_mode) >> 4) % 2);
+	return (bool)((ec.readByte(offsets.fan_mode) >> 4) % 2);
 }
 
 bool Control::silent_set(bool enabled) {
@@ -48,6 +48,21 @@ bool Control::silent_set(bool enabled) {
 	}
 	else {
 		b &= 0b11101111;
+	}
+	return ec.writeByte(offsets.fan_mode, b);
+}
+
+bool Control::custom_curve_get() {
+	return (bool)(ec.readByte(offsets.fan_mode) >> 7);
+}
+
+bool Control::custom_curve_set(bool enabled) {
+	BYTE b = ec.readByte(offsets.fan_mode);
+	if (enabled) {
+		b |= 0b10000000;
+	}
+	else {
+		b &= 0b01111111;
 	}
 	return ec.writeByte(offsets.fan_mode, b);
 }

@@ -20,7 +20,10 @@ int main(int argc, char** argv)
     coolerboost_app->add_flag("--enable{1},--disable{2}", coolerboost_action, "CoolerBoost state");
     CLI::App* silent_app = fan_app->add_subcommand("silent", "Silent mode control");
     int silent_action{ 0 };
-    silent_app->add_flag("--enable{1},--disable{2}", silent_action, "CoolerBoost state");
+    silent_app->add_flag("--enable{1},--disable{2}", silent_action, "Silent mode state");
+    CLI::App* custom_curve_app = fan_app->add_subcommand("custom", "Custom fan curve state control");
+    int custom_curve_action{ 0 };
+    custom_curve_app->add_flag("--enable{1},--disable{2}", custom_curve_action, "Custom fan curve state");
     fan_app->require_subcommand(0, 1);
     string curve_text = "";
     bool gpu{ false };
@@ -104,6 +107,28 @@ int main(int argc, char** argv)
             }
             return 0;
         }
+        if (*custom_curve_app) {
+            string s;
+            switch (custom_curve_action) {
+            case 0:
+                s = "Custom curve mode state: ";
+                if (ctrl.custom_curve_get()) {
+                    s += "enabled\n";
+                }
+                else {
+                    s += "disabled\n";
+                }
+                cout << s;
+                break;
+            case 1:
+                ctrl.custom_curve_set(true);
+                break;
+            case 2:
+                ctrl.custom_curve_set(false);
+                break;
+            }
+            return 0;
+        }
         if (*fan_set) {
             FanCurve cur = ctrl.cpu_fan_curve_get();
             int i = 0;
@@ -123,6 +148,7 @@ int main(int argc, char** argv)
             }
             return 0;
         }
+        cout << "First enabled from top to bottom will take priority:\n";
         string s = "CoolerBoost state: ";
         if (ctrl.coolerboost_get()) {
             s += "enabled\n";
@@ -133,6 +159,14 @@ int main(int argc, char** argv)
         cout << s;
         s = "Silent mode state: ";
         if (ctrl.silent_get()) {
+            s += "enabled\n";
+        }
+        else {
+            s += "disabled\n";
+        }
+        cout << s;
+        s = "Custom curve mode state: ";
+        if (ctrl.custom_curve_get()) {
             s += "enabled\n";
         }
         else {
