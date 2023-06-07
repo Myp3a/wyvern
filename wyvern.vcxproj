@@ -133,11 +133,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ascii\asciiplotter.cpp" />
     <ClCompile Include="control.cpp" />
     <ClCompile Include="offsets.cpp" />
+    <ClCompile Include="structs.cpp" />
     <ClCompile Include="wyvern.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ascii\asciiplotter.h" />
     <ClInclude Include="CLI11.hpp" />
     <ClInclude Include="control.hpp" />
     <ClInclude Include="offsets.hpp" />
@@ -156,9 +159,9 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="ec\WinRing0x64.sys">
+    <None Include="ec\WinRing0x64.sys">
       <FileType>Document</FileType>
-    </CopyFileToFolders>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
