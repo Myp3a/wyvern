@@ -11,7 +11,6 @@ struct Point {
 class FanCurve {
 public:
 	Point point[6];
-	int get_interpolated(int temp);
 };
 
 enum FAN_STATE {
