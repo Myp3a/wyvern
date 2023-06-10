@@ -9,11 +9,13 @@ Heavily inspired by [isw](https://github.com/YoyPa/isw) and [msi-ec](https://git
 ## Features
  - Fan profile chaging
  - Custom fan curve support
+ - System performance mode selection
  - Battery charge threshold setting
  - Webcam lock
+ - FN key swap
 
 ## Usage
-TBD...
+`wyvern [subcommand] [options]`. Must be run as administrator.
 
 ## Tested on
  - MSI Raider GE77 HX
