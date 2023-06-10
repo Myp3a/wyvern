@@ -32,9 +32,9 @@ struct Offsets
 static const Offsets GE77HXOffsets{
 	.coolerboost = 0x98,
 	.fan_mode = 0xd4,
-	.cpu_temp_arr = 0x6a,
-	.cpu_fan_arr = 0x73,
-	.gpu_temp_arr = 0x82,
+	.cpu_temp_arr = 0x69,
+	.cpu_fan_arr = 0x72,
+	.gpu_temp_arr = 0x81,
 	.gpu_fan_arr = 0x8a,
 	.cpu_fan_percent = 0x71,
 	.cpu_fan_rpm = 0xCB,
