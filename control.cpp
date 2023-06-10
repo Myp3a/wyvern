@@ -7,7 +7,13 @@ Control::Control() {
 	for (int i = 0; i < 12; i++) {
 		this->firmware += (char)ec.readByte(0xA0 + i);
 	}
-	this->offsets = get_offsets(firmware);
+	try {
+		this->offsets = get_offsets(firmware);
+		this->_offsets_available = true;
+	}
+	catch (...) {
+		this->_offsets_available = false;
+	};
 }
 
 Control::~Control() {
@@ -20,6 +26,10 @@ std::string Control::firmware_name() {
 
 void Control::dump_ec() {
 	ec.printDump();
+}
+
+bool Control::offsets_available() {
+	return this->_offsets_available;
 }
 
 bool Control::coolerboost_get() {

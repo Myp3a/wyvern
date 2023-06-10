@@ -100,6 +100,11 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    if (!ctrl.offsets_available()) {
+        cout << "No offsets found for your firmware. Can't continue working. Please, report your firmware version and EC dump with \"version\".\n";
+        return 1;
+    }
+
     if (*fan_app) {
         if (!desired_fan_curve.empty()) {
             FanCurve cur = ctrl.cpu_fan_curve_get();

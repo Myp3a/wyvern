@@ -10,6 +10,7 @@ private:
 	EmbeddedController ec;
 	std::string firmware;
 	Offsets offsets;
+	bool _offsets_available;
 
 public:
 	Control();
@@ -17,6 +18,7 @@ public:
 
 	std::string firmware_name();
 	void dump_ec();
+	bool offsets_available();
 
 	bool coolerboost_get();
 	bool coolerboost_set(bool enabled);
