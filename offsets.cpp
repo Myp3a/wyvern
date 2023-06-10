@@ -16,6 +16,8 @@ Offsets myOffsets{
 	.webcam_enabled_first = 0x2e,
 	.webcam_enabled_second = 0x2f,
 	.fn_side = 0xe8,
+	.shift_mode = 0xd2,
+	.super_battery = 0xeb,
 };
 
 Offsets get_offsets(std::string firmware_name) {

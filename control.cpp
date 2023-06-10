@@ -206,3 +206,27 @@ bool Control::fn_on_the_left_set(bool state) {
 	}
 	return ec.writeByte(offsets.fn_side, b);
 }
+
+SHIFT_MODE Control::shift_mode_get() {
+	return (SHIFT_MODE)(0b00000111 & (int)ec.readByte(offsets.shift_mode));
+}
+
+bool Control::shift_mode_set(SHIFT_MODE mode) {
+	BYTE b = ec.readByte(offsets.shift_mode);
+	b &= 0b11111000;
+	switch (mode) {
+	case SHIFT_MODE::TURBO:
+		b |= 0b00000100;
+		break;
+	case SHIFT_MODE::SPORT:
+		b |= 0b00000000;
+		break;
+	case SHIFT_MODE::BALANCED:
+		b |= 0b00000001;
+		break;
+	case SHIFT_MODE::ECO:
+		b |= 0b00000010;
+		break;
+	}
+	return ec.writeByte(offsets.shift_mode, b);
+}

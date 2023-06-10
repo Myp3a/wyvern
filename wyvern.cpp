@@ -87,6 +87,11 @@ int main(int argc, char** argv)
     string desired_fn_position;
     fn_app->add_option("position", desired_fn_position, "Keyboard side")->check(CLI::IsMember({ "left", "right" }));
 
+    // superbattery handled as shift mode eco. SB switch appears to do nothing on it's own?
+    CLI::App* shift_mode_app = app.add_subcommand("shift", "System performance mode selection");
+    string desired_shift_mode;
+    shift_mode_app->add_option("mode", desired_shift_mode, "Shift mode")->check(CLI::IsMember({ "turbo", "sport", "balanced", "eco" }));
+
     CLI11_PARSE(app, argc, argv);
     Control ctrl = Control();
 
@@ -118,7 +123,7 @@ int main(int argc, char** argv)
         }
         if (!desired_fan_mode.empty()) {
             if (*fan_set) {
-                switch (fan_mapping.at(desired_fan_mode)) {
+                switch (fan_state.at(desired_fan_mode)) {
                 case FAN_STATE::COOLERBOOST:
                     ctrl.coolerboost_set(true);
                     ctrl.silent_set(false);
@@ -143,7 +148,7 @@ int main(int argc, char** argv)
                 return 0;
             }
             else {
-                switch (fan_mapping.at(desired_fan_mode)) {
+                switch (fan_state.at(desired_fan_mode)) {
                 case FAN_STATE::COOLERBOOST:
                     cout << ctrl.coolerboost_get();
                     break;
@@ -214,10 +219,10 @@ int main(int argc, char** argv)
     if (*fn_app) {
         if (!desired_fn_position.empty()) {
             switch (fn_side.at(desired_fn_position)) {
-            case SIDE::LEFT:
+            case FN_SIDE::LEFT:
                 ctrl.fn_on_the_left_set(true);
                 break;
-            case SIDE::RIGHT:
+            case FN_SIDE::RIGHT:
                 ctrl.fn_on_the_left_set(false);
                 break;
             }
@@ -229,6 +234,30 @@ int main(int argc, char** argv)
         }
         else {
             cout << "right\n";
+        }
+        return 0;
+    }
+
+    if (*shift_mode_app) {
+        if (!desired_shift_mode.empty()) {
+            ctrl.shift_mode_set(shift_mode.at(desired_shift_mode));
+            return 0;
+        }
+        cout << "Current mode: ";
+        SHIFT_MODE mode = ctrl.shift_mode_get();
+        switch (mode) {
+        case SHIFT_MODE::TURBO:
+            cout << "turbo\n";
+            break;
+        case SHIFT_MODE::SPORT:
+            cout << "sport\n";
+            break;
+        case SHIFT_MODE::BALANCED:
+            cout << "balanced";
+            break;
+        case SHIFT_MODE::ECO:
+            cout << "eco\n";
+            break;
         }
         return 0;
     }

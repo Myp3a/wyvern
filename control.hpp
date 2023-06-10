@@ -44,4 +44,7 @@ public:
 
 	bool fn_on_the_left_get();
 	bool fn_on_the_left_set(bool state);
+
+	SHIFT_MODE shift_mode_get();
+	bool shift_mode_set(SHIFT_MODE mode);
 };
