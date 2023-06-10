@@ -1,4 +1,4 @@
-<img src="cryo.ico" align="right" width="128" height="128">
+<img src="cryo.svg" align="right" width="128" height="128">
 
 # Wyvern
 A tool to alter fan modes of MSI laptops and something more...  
