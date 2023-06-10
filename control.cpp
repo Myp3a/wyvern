@@ -191,3 +191,18 @@ bool Control::webcam_second_set(bool state) {
 		return ec.writeByte(offsets.webcam_enabled_second, val);
 	}
 }
+
+bool Control::fn_on_the_left_get() {
+	return bool(ec.readByte(offsets.fn_side) >> 4);
+}
+
+bool Control::fn_on_the_left_set(bool state) {
+	BYTE b = ec.readByte(offsets.fn_side);
+	if (state) {
+		b |= 0b00010000;
+	}
+	else {
+		b &= 0b11101111;
+	}
+	return ec.writeByte(offsets.fn_side, b);
+}

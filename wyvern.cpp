@@ -83,6 +83,10 @@ int main(int argc, char** argv)
     int battery_percent{ 0 };
     battery_app->add_option("percent", battery_percent, "Percent to end charge at")->check(CLI::Range(10,100));
 
+    CLI::App* fn_app = app.add_subcommand("fn", "FN key position");
+    string desired_fn_position;
+    fn_app->add_option("position", desired_fn_position, "Keyboard side")->check(CLI::IsMember({ "left", "right" }));
+
     CLI11_PARSE(app, argc, argv);
     Control ctrl = Control();
 
@@ -203,6 +207,28 @@ int main(int argc, char** argv)
         }
         else {
             cout << ctrl.battery_threshold_get() << "\n";
+        }
+        return 0;
+    }
+
+    if (*fn_app) {
+        if (!desired_fn_position.empty()) {
+            switch (fn_side.at(desired_fn_position)) {
+            case SIDE::LEFT:
+                ctrl.fn_on_the_left_set(true);
+                break;
+            case SIDE::RIGHT:
+                ctrl.fn_on_the_left_set(false);
+                break;
+            }
+            return 0;
+        }
+        cout << "FN key position: ";
+        if (ctrl.fn_on_the_left_get()) {
+            cout << "left\n";
+        }
+        else {
+            cout << "right\n";
         }
         return 0;
     }

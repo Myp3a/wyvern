@@ -22,6 +22,8 @@ struct Offsets
 
 	int webcam_enabled_first;
 	int webcam_enabled_second;
+
+	int fn_side;
 };
 
 Offsets get_offsets(std::string firmware_name);

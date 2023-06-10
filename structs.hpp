@@ -25,6 +25,11 @@ enum STATE {
 	DISABLED
 };
 
+enum SIDE {
+	LEFT,
+	RIGHT
+};
+
 static const std::map <std::string, FAN_STATE> fan_mapping = {
 	{"coolerboost", FAN_STATE::COOLERBOOST},
 	{"silent",		FAN_STATE::SILENT},
@@ -35,4 +40,9 @@ static const std::map <std::string, FAN_STATE> fan_mapping = {
 static const std::map <std::string, STATE> state = {
 	{"enabled", STATE::ENABLED},
 	{"disabled", STATE::DISABLED}
+};
+
+static const std::map <std::string, SIDE> fn_side = {
+	{"left", SIDE::LEFT},
+	{"right", SIDE::RIGHT}
 };

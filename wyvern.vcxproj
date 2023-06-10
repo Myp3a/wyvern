@@ -136,7 +136,6 @@
     <ClCompile Include="ascii\asciiplotter.cpp" />
     <ClCompile Include="control.cpp" />
     <ClCompile Include="offsets.cpp" />
-    <ClCompile Include="structs.cpp" />
     <ClCompile Include="wyvern.cpp" />
   </ItemGroup>
   <ItemGroup>

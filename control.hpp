@@ -41,4 +41,7 @@ public:
 	bool webcam_second_get();
 	bool webcam_first_set(bool state);
 	bool webcam_second_set(bool state);
+
+	bool fn_on_the_left_get();
+	bool fn_on_the_left_set(bool state);
 };

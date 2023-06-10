@@ -14,7 +14,8 @@ Offsets myOffsets{
 	.gpu_fan_rpm = 0xc9,
 	.battery_threshold = 0xd7,
 	.webcam_enabled_first = 0x2e,
-	.webcam_enabled_second = 0x2f
+	.webcam_enabled_second = 0x2f,
+	.fn_side = 0xe8,
 };
 
 Offsets get_offsets(std::string firmware_name) {
