@@ -49,7 +49,8 @@ static const Offsets GE77HXOffsets{
 };
 
 static const std::map <std::string, Offsets> offsets_mappings = {
-	{"17K5IMS1.106", GE77HXOffsets}
+	{"17K5IMS1.106", GE77HXOffsets},
+	{"17S2IMS1.113", GE77HXOffsets}
 };
 
 Offsets get_offsets(std::string firmware_name);
