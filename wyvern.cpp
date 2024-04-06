@@ -216,6 +216,7 @@ int main(int argc, char** argv)
             ctrl.battery_threshold_set(battery_percent);
         }
         else {
+            cout << "Battery charge threshold: ";
             cout << ctrl.battery_threshold_get() << "\n";
         }
         return 0;
