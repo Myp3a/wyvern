@@ -147,11 +147,13 @@ int Control::gpu_fan_percent() {
 
 int Control::cpu_fan_rpm() {
 	int rpm = ec.readByte(offsets.cpu_fan_rpm);
+	if (rpm == 0) return 0;
 	return (int)(478000 / rpm);
 }
 
 int Control::gpu_fan_rpm() {
 	int rpm = ec.readByte(offsets.gpu_fan_rpm);
+	if (rpm == 0) return 0;
 	return (int)(478000 / rpm);
 }
 

@@ -16,6 +16,8 @@ void print_system_info(Control ctrl) {
 }
 
 void print_fan_info(Control ctrl, bool pretty = false) {
+    cout << "CPU fan speed: current " << ctrl.cpu_fan_rpm() << " RPM, target " << ctrl.cpu_fan_percent() << "%" << endl;
+    cout << "GPU fan speed: current " << ctrl.gpu_fan_rpm() << " RPM, target " << ctrl.gpu_fan_percent() << "%" << endl;
     if (pretty) {
         cout << "Current mode: ";
     }
